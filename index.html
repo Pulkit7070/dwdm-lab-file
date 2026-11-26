@@ -3,17 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DWDM Lab File</title>
+<title>XLab Files</title>
 <style>
-html,body{margin:0;height:100%;background:#1f2328;font-family:system-ui,sans-serif;color:#fff}
-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 16px;background:#24292f}
-h1{font-size:16px;margin:0}
-a{color:#fff;background:#2f81f7;padding:6px 12px;border-radius:6px;text-decoration:none;font-size:14px;white-space:nowrap}
-iframe{display:block;width:100%;height:calc(100% - 52px);border:0;background:#fff}
+:root{--bg:#f6f7f9;--card:#fff;--text:#1d2129;--muted:#5d6675;--line:#e2e5ea;--accent:#2f6fde;--code:#0f1720;--codetext:#e6edf3}
+@media (prefers-color-scheme:dark){:root{--bg:#0e1116;--card:#161b22;--text:#e6edf3;--muted:#9aa4b2;--line:#2a313c;--accent:#5b9bff;--code:#0a0d12;--codetext:#e6edf3}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:var(--card);border-bottom:1px solid var(--line);padding:14px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{margin:0;font-size:20px;letter-spacing:.2px}
+header h1 a{color:inherit;text-decoration:none}
+header .sub{color:var(--muted);font-size:13px}
+main{max-width:980px;margin:0 auto;padding:20px 16px 48px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;text-decoration:none;color:inherit;display:block}
+a.card:hover{border-color:var(--accent)}
+.card h2,.card h3{margin:0 0 6px;font-size:17px}
+.card p{margin:0;color:var(--muted);font-size:14px}
+.tag{display:inline-block;font-size:12px;color:var(--accent);font-weight:600;margin-bottom:6px}
+.back{display:inline-block;margin-bottom:14px;color:var(--accent);text-decoration:none;font-size:14px}
+.btn{display:inline-block;background:var(--accent);color:#fff;border:0;border-radius:6px;padding:7px 12px;font-size:14px;cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+pre{background:var(--code);color:var(--codetext);padding:14px;border-radius:8px;overflow:auto;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;margin:0}
+.pdf{width:100%;height:calc(100vh - 170px);min-height:480px;border:1px solid var(--line);border-radius:8px;background:#fff}
+h2.page{margin:0 0 4px;font-size:20px}
+.muted{color:var(--muted)}
+ul.files{margin:6px 0 0;padding-left:18px}
+.nav{display:flex;justify-content:space-between;margin-top:16px;gap:8px}
 </style>
 </head>
 <body>
-<header><h1>Data Warehousing and Data Mining Lab (CIE-425P)</h1><a href="dwdm-lab-file.pdf" download>Download PDF</a></header>
-<iframe src="dwdm-lab-file.pdf" title="DWDM Lab File"></iframe>
+<header><h1><a href="#">XLab Files</a></h1><span class="sub">Data Warehousing and Data Mining Lab (CIE-425P)</span></header>
+<main id="app"></main>
+<script>
+const EXPS=[
+{t:"Study of ETL process and its tools",f:"exp01.py",d:["us_average_prices_monthly.csv","us_average_prices_item_summary.csv"]},
+{t:"Data warehouse cleansing to input names from users (inconsistent) and format them",f:"exp02.py",d:["us_average_prices_item_summary.csv"]},
+{t:"Data warehouse cleansing to remove redundancy in data",f:"exp03.py",d:["us_average_prices_item_summary.csv"]},
+{t:"Introduction to WEKA tool",f:"exp04.sh",d:["weather.numeric.arff"],w:1},
+{t:"Implementation of Classification technique on ARFF files using WEKA",f:"exp05.sh",d:["iris.arff"],w:1},
+{t:"Implementation of Clustering technique on ARFF files using WEKA",f:"exp06.sh",d:["iris.arff"],w:1},
+{t:"Implementation of Association Rule technique on ARFF files using WEKA",f:"exp07.sh",d:["supermarket.arff"],w:1},
+{t:"Implementation of Visualization technique on ARFF files using WEKA",f:"exp08.py",d:["iris.arff"]},
+{t:"Perform Data Similarity Measure (Euclidean, Manhattan Distance)",f:"exp09.py",d:["nifty_500_stats_clean.csv"]},
+{t:"Perform Apriori algorithm to mine frequent item-sets",f:"exp10.py",d:[]},
+{t:"Develop different clustering algorithms like K-Means, KMedoids Algorithm, Partitioning Algorithm and Hierarchical",f:"exp11.py",d:[]},
+{t:"Apply Validity Measures to evaluate the quality of Data",f:"exp12.py",d:["WA_Fn-UseC_-HR-Employee-Attrition.csv"]}
+];
+const app=document.getElementById("app");
+const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+function home(){
+app.innerHTML=`<p class="muted" style="margin-top:0">Select a file.</p><div class="grid">
+<a class="card" href="#pdf"><span class="tag">PDF</span><h2>DWDM Full Lab File</h2><p>Complete file with index and all 12 experiments.</p></a>
+<a class="card" href="#code"><span class="tag">CODE</span><h2>DWDM Short Code</h2><p>Short, simple code for all 12 experiments with datasets.</p></a>
+</div>`;}
+function pdf(){
+app.innerHTML=`<a class="back" href="#">&larr; All files</a><div class="row" style="justify-content:space-between"><h2 class="page">DWDM Full Lab File</h2><a class="btn" href="dwdm-lab-file.pdf" download>Download PDF</a></div>
+<iframe class="pdf" src="dwdm-lab-file.pdf" title="DWDM Lab File"></iframe>`;}
+function list(){
+app.innerHTML=`<a class="back" href="#">&larr; All files</a><h2 class="page">DWDM Short Code</h2><p class="muted">Pick an experiment.</p><div class="grid">`+
+EXPS.map((e,i)=>`<a class="card" href="#exp${i+1}"><span class="tag">Experiment ${i+1}</span><h3>${esc(e.t)}</h3></a>`).join("")+`</div>`;}
+async function exp(n){
+const e=EXPS[n-1];if(!e)return home();
+const run=e.f.endsWith(".sh")?`Put <code>weka.jar</code> (from your Weka install folder) and the dataset in one folder, then run <code>bash ${e.f}</code>. In the Weka GUI, the same options can be set in the Explorer.`:`Put the dataset in the same folder and run <code>python ${e.f}</code>, or paste it into a Jupyter cell.`;
+app.innerHTML=`<a class="back" href="#code">&larr; All experiments</a><span class="tag" style="display:block">Experiment ${n}</span><h2 class="page">${esc(e.t)}</h2>
+<p class="muted">${run}</p>
+${e.d.length?`<div class="card" style="margin:10px 0"><strong>Datasets</strong><ul class="files">${e.d.map(x=>`<li><a href="data/${x}" download>${x}</a></li>`).join("")}</ul></div>`:`<p class="muted">No dataset file needed.</p>`}
+<div class="row"><button class="btn" id="copy">Copy code</button><a class="btn ghost" href="code/${e.f}" download>Download ${e.f}</a></div>
+<pre id="src">Loading...</pre>
+<div class="nav">${n>1?`<a class="btn ghost" href="#exp${n-1}">&larr; Experiment ${n-1}</a>`:"<span></span>"}${n<12?`<a class="btn ghost" href="#exp${n+1}">Experiment ${n+1} &rarr;</a>`:""}</div>`;
+const src=await (await fetch("code/"+e.f)).text();
+document.getElementById("src").textContent=src;
+document.getElementById("copy").onclick=async ev=>{try{await navigator.clipboard.writeText(src);ev.target.textContent="Copied";}catch(_){ev.target.textContent="Select and copy";}setTimeout(()=>ev.target.textContent="Copy code",1500);};}
+function route(){const h=location.hash.slice(1);window.scrollTo(0,0);
+if(h==="pdf")pdf();else if(h==="code")list();else if(/^exp\d+$/.test(h))exp(+h.slice(3));else home();}
+addEventListener("hashchange",route);route();
+</script>
 </body>
 </html>
