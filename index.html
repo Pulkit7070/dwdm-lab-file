@@ -60,15 +60,16 @@ mlda:{name:"MLDA",full:"Machine Learning and Data Analytics (ML-467P)",pdf:"mlda
 {t:"Application of Technology Acceptance Model in Cloud Computing",f:"exp07.py",d:["tam_cloud_survey.csv"]},
 {t:"Measuring Acceptability of a New Product",f:"exp08.py",d:["car_evaluation.csv"]},
 {t:"Fraud Analysis for Credit Card and Mobile Payment Transactions",f:"exp09.py",d:["creditcard.csv.gz","paysim_sample_300k.csv"]},
-{t:"Artificial Intelligence and Employment",f:"exp10.py",d:["aioe_occupations.csv","occ_salary_2021.csv","occ_required_education.csv"]}]}};
+{t:"Artificial Intelligence and Employment",f:"exp10.py",d:["aioe_occupations.csv","occ_salary_2021.csv","occ_required_education.csv"]}]},
+rldl:{name:"RLDL",full:"Reinforcement Learning and Deep Learning Lab",pdf:"rldl-lab-file.pdf",docx:"rldl-lab-file.docx",n:10,exps:[]}};
 const app=document.getElementById("app"),sub=document.querySelector("header .sub");
 const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
 function home(){sub.textContent="Lab files and short code";
 app.innerHTML=`<p class="muted" style="margin-top:0">Select a file.</p><div class="grid">`+Object.entries(SUBJ).map(([k,s])=>`
-<a class="card" href="#${k}/pdf"><span class="tag">PDF</span><h2>${s.name} Full Lab File</h2><p>${esc(s.full)}. Complete file with index and all ${s.exps.length} experiments.</p></a>
-<a class="card" href="#${k}/code"><span class="tag">CODE</span><h2>${s.name} Short Code</h2><p>Short, simple code for all ${s.exps.length} experiments with datasets.</p></a>`).join("")+`</div>`;}
+<a class="card" href="#${k}/pdf"><span class="tag">PDF</span><h2>${s.name} Full Lab File</h2><p>${esc(s.full)}. Complete file with all ${s.n||s.exps.length} experiments.</p></a>
+${s.exps.length?`<a class="card" href="#${k}/code"><span class="tag">CODE</span><h2>${s.name} Short Code</h2><p>Short, simple code for all ${s.exps.length} experiments with datasets.</p></a>`:""}`).join("")+`</div>`;}
 function pdf(k,s){
-app.innerHTML=`<a class="back" href="#">&larr; All files</a><div class="row" style="justify-content:space-between"><h2 class="page">${s.name} Full Lab File</h2><a class="btn" href="${s.pdf}" download>Download PDF</a></div>
+app.innerHTML=`<a class="back" href="#">&larr; All files</a><div class="row" style="justify-content:space-between"><h2 class="page">${s.name} Full Lab File</h2><span class="row" style="margin:0"><a class="btn" href="${s.pdf}" download>Download PDF</a>${s.docx?`<a class="btn ghost" href="${s.docx}" download>Download Word file</a>`:""}</span></div>
 <iframe class="pdf" src="${s.pdf}" title="${s.name} Lab File"></iframe>`;}
 function list(k,s){
 app.innerHTML=`<a class="back" href="#">&larr; All files</a><h2 class="page">${s.name} Short Code</h2><p class="muted">Pick an experiment.</p><div class="grid">`+
