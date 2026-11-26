@@ -33,50 +33,62 @@ ul.files{margin:6px 0 0;padding-left:18px}
 </style>
 </head>
 <body>
-<header><h1><a href="#">XLab Files</a></h1><span class="sub">Data Warehousing and Data Mining Lab (CIE-425P)</span></header>
+<header><h1><a href="#">XLab Files</a></h1><span class="sub"></span></header>
 <main id="app"></main>
 <script>
-const EXPS=[
+const SUBJ={
+dwdm:{name:"DWDM",full:"Data Warehousing and Data Mining Lab (CIE-425P)",pdf:"dwdm-lab-file.pdf",dir:"code",exps:[
 {t:"Study of ETL process and its tools",f:"exp01.py",d:["us_average_prices_monthly.csv","us_average_prices_item_summary.csv"]},
 {t:"Data warehouse cleansing to input names from users (inconsistent) and format them",f:"exp02.py",d:["us_average_prices_item_summary.csv"]},
 {t:"Data warehouse cleansing to remove redundancy in data",f:"exp03.py",d:["us_average_prices_item_summary.csv"]},
-{t:"Introduction to WEKA tool",f:"exp04.sh",d:["weather.numeric.arff"],w:1},
-{t:"Implementation of Classification technique on ARFF files using WEKA",f:"exp05.sh",d:["iris.arff"],w:1},
-{t:"Implementation of Clustering technique on ARFF files using WEKA",f:"exp06.sh",d:["iris.arff"],w:1},
-{t:"Implementation of Association Rule technique on ARFF files using WEKA",f:"exp07.sh",d:["supermarket.arff"],w:1},
+{t:"Introduction to WEKA tool",f:"exp04.sh",d:["weather.numeric.arff"]},
+{t:"Implementation of Classification technique on ARFF files using WEKA",f:"exp05.sh",d:["iris.arff"]},
+{t:"Implementation of Clustering technique on ARFF files using WEKA",f:"exp06.sh",d:["iris.arff"]},
+{t:"Implementation of Association Rule technique on ARFF files using WEKA",f:"exp07.sh",d:["supermarket.arff"]},
 {t:"Implementation of Visualization technique on ARFF files using WEKA",f:"exp08.py",d:["iris.arff"]},
 {t:"Perform Data Similarity Measure (Euclidean, Manhattan Distance)",f:"exp09.py",d:["nifty_500_stats_clean.csv"]},
 {t:"Perform Apriori algorithm to mine frequent item-sets",f:"exp10.py",d:[]},
 {t:"Develop different clustering algorithms like K-Means, KMedoids Algorithm, Partitioning Algorithm and Hierarchical",f:"exp11.py",d:[]},
-{t:"Apply Validity Measures to evaluate the quality of Data",f:"exp12.py",d:["WA_Fn-UseC_-HR-Employee-Attrition.csv"]}
-];
-const app=document.getElementById("app");
+{t:"Apply Validity Measures to evaluate the quality of Data",f:"exp12.py",d:["WA_Fn-UseC_-HR-Employee-Attrition.csv"]}]},
+mlda:{name:"MLDA",full:"Machine Learning and Data Analytics (ML-467P)",pdf:"mlda-lab-file.pdf",dir:"mlda",exps:[
+{t:"Employee Attrition using the IBM HR dataset: dimension reduction (feature selection, PCA, t-SNE, UMAP) and clustering",f:"exp01.py",d:["WA_Fn-UseC_-HR-Employee-Attrition.csv"]},
+{t:"Balanced Scorecard Model for Measuring Organizational Performance",f:"exp02.py",d:[]},
+{t:"Classification of Nifty 500 Companies into High, Medium and Low Cap",f:"exp03.py",d:["nifty_500_stats_clean.csv"]},
+{t:"Performance Appraisal in Organizations",f:"exp04.py",d:["WA_Fn-UseC_-HR-Employee-Attrition.csv"]},
+{t:"Prediction of Customer Buying Intention due to Digital Marketing",f:"exp05.py",d:[]},
+{t:"Predicting Phishing Websites",f:"exp06.py",d:["uci-ml-phishing-dataset.csv"]},
+{t:"Application of Technology Acceptance Model in Cloud Computing",f:"exp07.py",d:["tam_cloud_survey.csv"]},
+{t:"Measuring Acceptability of a New Product",f:"exp08.py",d:["car_evaluation.csv"]},
+{t:"Fraud Analysis for Credit Card and Mobile Payment Transactions",f:"exp09.py",d:["creditcard.csv.gz","paysim_sample_300k.csv"]},
+{t:"Artificial Intelligence and Employment",f:"exp10.py",d:["aioe_occupations.csv","occ_salary_2021.csv","occ_required_education.csv"]}]}};
+const app=document.getElementById("app"),sub=document.querySelector("header .sub");
 const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
-function home(){
-app.innerHTML=`<p class="muted" style="margin-top:0">Select a file.</p><div class="grid">
-<a class="card" href="#pdf"><span class="tag">PDF</span><h2>DWDM Full Lab File</h2><p>Complete file with index and all 12 experiments.</p></a>
-<a class="card" href="#code"><span class="tag">CODE</span><h2>DWDM Short Code</h2><p>Short, simple code for all 12 experiments with datasets.</p></a>
-</div>`;}
-function pdf(){
-app.innerHTML=`<a class="back" href="#">&larr; All files</a><div class="row" style="justify-content:space-between"><h2 class="page">DWDM Full Lab File</h2><a class="btn" href="dwdm-lab-file.pdf" download>Download PDF</a></div>
-<iframe class="pdf" src="dwdm-lab-file.pdf" title="DWDM Lab File"></iframe>`;}
-function list(){
-app.innerHTML=`<a class="back" href="#">&larr; All files</a><h2 class="page">DWDM Short Code</h2><p class="muted">Pick an experiment.</p><div class="grid">`+
-EXPS.map((e,i)=>`<a class="card" href="#exp${i+1}"><span class="tag">Experiment ${i+1}</span><h3>${esc(e.t)}</h3></a>`).join("")+`</div>`;}
-async function exp(n){
-const e=EXPS[n-1];if(!e)return home();
+function home(){sub.textContent="Lab files and short code";
+app.innerHTML=`<p class="muted" style="margin-top:0">Select a file.</p><div class="grid">`+Object.entries(SUBJ).map(([k,s])=>`
+<a class="card" href="#${k}/pdf"><span class="tag">PDF</span><h2>${s.name} Full Lab File</h2><p>${esc(s.full)}. Complete file with index and all ${s.exps.length} experiments.</p></a>
+<a class="card" href="#${k}/code"><span class="tag">CODE</span><h2>${s.name} Short Code</h2><p>Short, simple code for all ${s.exps.length} experiments with datasets.</p></a>`).join("")+`</div>`;}
+function pdf(k,s){
+app.innerHTML=`<a class="back" href="#">&larr; All files</a><div class="row" style="justify-content:space-between"><h2 class="page">${s.name} Full Lab File</h2><a class="btn" href="${s.pdf}" download>Download PDF</a></div>
+<iframe class="pdf" src="${s.pdf}" title="${s.name} Lab File"></iframe>`;}
+function list(k,s){
+app.innerHTML=`<a class="back" href="#">&larr; All files</a><h2 class="page">${s.name} Short Code</h2><p class="muted">Pick an experiment.</p><div class="grid">`+
+s.exps.map((e,i)=>`<a class="card" href="#${k}/exp${i+1}"><span class="tag">Experiment ${i+1}</span><h3>${esc(e.t)}</h3></a>`).join("")+`</div>`;}
+async function exp(k,s,n){
+const e=s.exps[n-1],N=s.exps.length;if(!e)return list(k,s);
 const run=e.f.endsWith(".sh")?`Put <code>weka.jar</code> (from your Weka install folder) and the dataset in one folder, then run <code>bash ${e.f}</code>. In the Weka GUI, the same options can be set in the Explorer.`:`Put the dataset in the same folder and run <code>python ${e.f}</code>, or paste it into a Jupyter cell.`;
-app.innerHTML=`<a class="back" href="#code">&larr; All experiments</a><span class="tag" style="display:block">Experiment ${n}</span><h2 class="page">${esc(e.t)}</h2>
+app.innerHTML=`<a class="back" href="#${k}/code">&larr; All ${s.name} experiments</a><span class="tag" style="display:block">${s.name} Experiment ${n}</span><h2 class="page">${esc(e.t)}</h2>
 <p class="muted">${run}</p>
 ${e.d.length?`<div class="card" style="margin:10px 0"><strong>Datasets</strong><ul class="files">${e.d.map(x=>`<li><a href="data/${x}" download>${x}</a></li>`).join("")}</ul></div>`:`<p class="muted">No dataset file needed.</p>`}
-<div class="row"><button class="btn" id="copy">Copy code</button><a class="btn ghost" href="code/${e.f}" download>Download ${e.f}</a></div>
+<div class="row"><button class="btn" id="copy">Copy code</button><a class="btn ghost" href="${s.dir}/${e.f}" download>Download ${e.f}</a></div>
 <pre id="src">Loading...</pre>
-<div class="nav">${n>1?`<a class="btn ghost" href="#exp${n-1}">&larr; Experiment ${n-1}</a>`:"<span></span>"}${n<12?`<a class="btn ghost" href="#exp${n+1}">Experiment ${n+1} &rarr;</a>`:""}</div>`;
-const src=await (await fetch("code/"+e.f)).text();
+<div class="nav">${n>1?`<a class="btn ghost" href="#${k}/exp${n-1}">&larr; Experiment ${n-1}</a>`:"<span></span>"}${n<N?`<a class="btn ghost" href="#${k}/exp${n+1}">Experiment ${n+1} &rarr;</a>`:""}</div>`;
+const src=await (await fetch(s.dir+"/"+e.f)).text();
 document.getElementById("src").textContent=src;
 document.getElementById("copy").onclick=async ev=>{try{await navigator.clipboard.writeText(src);ev.target.textContent="Copied";}catch(_){ev.target.textContent="Select and copy";}setTimeout(()=>ev.target.textContent="Copy code",1500);};}
-function route(){const h=location.hash.slice(1);window.scrollTo(0,0);
-if(h==="pdf")pdf();else if(h==="code")list();else if(/^exp\d+$/.test(h))exp(+h.slice(3));else home();}
+function route(){let h=location.hash.slice(1);window.scrollTo(0,0);
+if(h==="pdf")h="dwdm/pdf";else if(h==="code")h="dwdm/code";else if(/^exp\d+$/.test(h))h="dwdm/"+h;
+const [k,p]=h.split("/"),s=SUBJ[k];if(!s)return home();sub.textContent=s.full;
+if(p==="pdf")pdf(k,s);else if(/^exp\d+$/.test(p||""))exp(k,s,+p.slice(3));else list(k,s);}
 addEventListener("hashchange",route);route();
 </script>
 </body>
