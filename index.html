@@ -62,12 +62,13 @@ mlda:{name:"MLDA",full:"Machine Learning and Data Analytics (ML-467P)",pdf:"mlda
 {t:"Fraud Analysis for Credit Card and Mobile Payment Transactions",f:"exp09.py",d:["creditcard.csv.gz","paysim_sample_300k.csv"]},
 {t:"Artificial Intelligence and Employment",f:"exp10.py",d:["aioe_occupations.csv","occ_salary_2021.csv","occ_required_education.csv"]}]},
 rldl:{name:"RLDL",full:"Reinforcement Learning and Deep Learning Lab",pdf:"rldl-lab-file.pdf",docx:"rldl-lab-file.docx",n:10,exps:[]},
-dscc:{name:"DSCC",full:"Distributed Systems and Cloud Computing Lab (CIE-407P)",pdf:"dscc-lab-file.pdf",n:10,exps:[]}};
+dscc:{name:"DSCC",full:"Distributed Systems and Cloud Computing Lab (CIE-407P)",pdf:"dscc-lab-file.pdf",n:10,exps:[],pages:[["Write a Program in Java to implement RPC", 4], ["Implement the concept of Remote Method Invocation in Java", 8], ["Write a java program to implement Lamport's Logical clock", 12], ["Implement mutual exclusion service using Lamport's Mutual Exclusion Algorithm", 16], ["Install Hadoop on Windows", 23], ["Run a simple application on single node Hadoop Cluster", 29], ["Install Google App Engine and develop a simple web application", 35], ["Install Virtualbox / VMware Workstation with different flavours of linux on windows", 41], ["Simulate a cloud scenario using CloudSim and run a scheduling algorithm", 46], ["Launch Web application using Google App Engine", 53]]}};
 const app=document.getElementById("app"),sub=document.querySelector("header .sub");
 const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
 function home(){sub.textContent="Lab files and short code";
 app.innerHTML=`<p class="muted" style="margin-top:0">Select a file.</p><div class="grid">`+Object.entries(SUBJ).map(([k,s])=>`
 <a class="card" href="#${k}/pdf"><span class="tag">PDF</span><h2>${s.name} Full Lab File</h2><p>${esc(s.full)}. Complete file with all ${s.n||s.exps.length} experiments.</p></a>
+${s.pages?`<a class="card" href="#${k}/index"><span class="tag">INDEX</span><h2>${s.name} Quick Links</h2><p>Jump to any experiment in the lab file.</p></a>`:""}
 ${s.exps.length?`<a class="card" href="#${k}/code"><span class="tag">CODE</span><h2>${s.name} Short Code</h2><p>Short, simple code for all ${s.exps.length} experiments with datasets.</p></a>`:""}`).join("")+`</div>`;}
 function pdf(k,s){
 app.innerHTML=`<a class="back" href="#">&larr; All files</a><div class="row" style="justify-content:space-between"><h2 class="page">${s.name} Full Lab File</h2><span class="row" style="margin:0"><a class="btn" href="${s.pdf}" download>Download PDF</a>${s.docx?`<a class="btn ghost" href="${s.docx}" download>Download Word file</a>`:""}</span></div>
@@ -90,7 +91,10 @@ document.getElementById("copy").onclick=async ev=>{try{await navigator.clipboard
 function route(){let h=location.hash.slice(1);window.scrollTo(0,0);
 if(h==="pdf")h="dwdm/pdf";else if(h==="code")h="dwdm/code";else if(/^exp\d+$/.test(h))h="dwdm/"+h;
 const [k,p]=h.split("/"),s=SUBJ[k];if(!s)return home();sub.textContent=s.full;
-if(p==="pdf")pdf(k,s);else if(/^exp\d+$/.test(p||""))exp(k,s,+p.slice(3));else list(k,s);}
+if(p==="index" && s.pages){
+app.innerHTML=`<a class="back" href="#">&larr; All files</a><h2 class="page">${s.name} Quick Links</h2><div class="grid">`+
+s.pages.map(([title,page],i)=>`<a class="card" href="${s.pdf}#page=${page}"><span class="tag">Experiment ${i+1}</span><h3>${esc(title)}</h3></a>`).join("")+`</div>`;
+}else if(p==="pdf")pdf(k,s);else if(/^exp\d+$/.test(p||""))exp(k,s,+p.slice(3));else list(k,s);}
 addEventListener("hashchange",route);route();
 </script>
 </body>
